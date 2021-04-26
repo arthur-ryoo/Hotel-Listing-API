@@ -4,14 +4,16 @@ using HotelListing.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HotelListing.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210426034901_AddedDefaultRoles")]
+    partial class AddedDefaultRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,15 +211,15 @@ namespace HotelListing.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "59821eec-67bb-4827-991c-9561ff6c30a3",
-                            ConcurrencyStamp = "ee59f087-bbcb-4c90-b714-c4628ad1d34d",
+                            Id = "cb8bbc26-fe3b-478d-856f-03344be0d61c",
+                            ConcurrencyStamp = "9501d223-e992-4d4f-b2c8-df203017a7f6",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "76fe6687-9b77-4db7-af67-817079e1f08d",
-                            ConcurrencyStamp = "8c3a2cee-f210-4467-a721-8eea60e116db",
+                            Id = "a0525a50-ba2c-416d-a243-89af13ebbcfb",
+                            ConcurrencyStamp = "a2a13691-891d-4e56-98ae-1a1389a04566",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
