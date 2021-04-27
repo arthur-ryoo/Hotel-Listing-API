@@ -18,7 +18,6 @@ namespace HotelListing.Services
         private readonly UserManager<ApiUser> _userManager;
         private readonly IConfiguration _configuration;
         private ApiUser _user;
-
         public AuthManager(UserManager<ApiUser> userManager,
             IConfiguration configuration)
         {
@@ -30,17 +29,19 @@ namespace HotelListing.Services
         {
             var signingCredentials = GetSigningCredentials();
             var claims = await GetClaims();
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+            var token = GenerateTokenOptions(signingCredentials, claims);
 
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
-            var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("lifetime").Value));
+            var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(
+                jwtSettings.GetSection("lifetime").Value));
+
             var token = new JwtSecurityToken(
-                issuer: jwtSettings.GetSection("validIssuer").Value,
+                issuer: jwtSettings.GetSection("Issuer").Value,
                 claims: claims,
                 expires: expiration,
                 signingCredentials: signingCredentials
@@ -52,9 +53,9 @@ namespace HotelListing.Services
         private async Task<List<Claim>> GetClaims()
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, _user.UserName)
-            };
+             {
+                 new Claim(ClaimTypes.Name, _user.UserName)
+             };
 
             var roles = await _userManager.GetRolesAsync(_user);
 
@@ -77,7 +78,8 @@ namespace HotelListing.Services
         public async Task<bool> ValidateUser(LoginUserDTO userDTO)
         {
             _user = await _userManager.FindByNameAsync(userDTO.Email);
-            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDTO.Password));
+            var validPassword = await _userManager.CheckPasswordAsync(_user, userDTO.Password);
+            return (_user != null && validPassword);
         }
     }
 }
